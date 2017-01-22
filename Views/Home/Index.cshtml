@@ -1,0 +1,19 @@
+@model WebApplication.ViewModels.HomePageViewModel
+<html>
+    <head>
+        <title>Home</title>
+    </head>
+    <body>
+        <h1>@Model.CurrentGreeting</h1>
+        <br>
+        <table>
+            @foreach(var restaurant in Model.Restaurants)
+            {
+                <tr>
+                    <td>@Html.ActionLink(restaurant.Id.ToString(), "Details", new { id = restaurant.Id})</td>
+                    <td>@restaurant.Name</td>
+                </tr>
+            }
+        </table>
+    </body>
+</html>
