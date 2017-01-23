@@ -1,14 +1,8 @@
 @model WebApplication.Entities.Restaurant
-<html>
-    <head>
-        <title>@Model.Name</title>
-    </head>
-    <body>
-        <h1>@Model.Name</h1>
-        <div>Id : @Model.Id</div>
-        <div>Cuisine : @Model.Cuisine</div>
-        <div>
-            @Html.ActionLink("Home", "Index")
-        </div>
-    </body>
-</html>
+
+<h1>@Model.Name</h1>
+<div>Id : @Model.Id</div>
+<div>Cuisine : @Model.Cuisine</div>
+<div>
+    @Html.ActionLink("Home", "Index")
+</div>
