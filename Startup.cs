@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Routing;
 using WebApplication.Services;
 using WebApplication.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 
 
@@ -45,7 +46,15 @@ namespace WebApplication
             services.AddMvc();
 
             services.AddDbContext<WebApplicationDbContext>(options =>
-                options.UseSqlite(Configuration["DefaultConnection"]));
+                options.UseSqlServer(Configuration["SqlServerLocalDb"]));
+
+            //User is the your type of user entity
+            //IdentityRole is the your type of role entity
+            //AddEntityFrameworkStores configures services like user store which is used to 
+            //create users and validate passwords
+            //Give AddEntityFrameworkStores the IdentityDbContext derived class to that will be used to communicate wil identity schema in the database
+            services.AddIdentity<User, IdentityRole>()
+            .AddEntityFrameworkStores<WebApplicationDbContext>();
 
 
         }
@@ -67,6 +76,8 @@ namespace WebApplication
                 app.UseDeveloperExceptionPage();
 
             }
+
+            app.UseIdentity();
 
             // serves up the index.html in wwwroot
             // app.UseDefaultFiles(); //goes to directories if finds default files serves them

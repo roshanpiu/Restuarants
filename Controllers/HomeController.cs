@@ -2,10 +2,13 @@ using Microsoft.AspNetCore.Mvc;
 using WebApplication.Entities;
 using WebApplication.ViewModels;
 using WebApplication.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApplication.Controllers
 {
+    
     //The controller base class gives aditional capabilities
+    [Authorize]
     public class HomeController : Controller
     {
         private IRestaurantData _restaurantData;
@@ -15,6 +18,8 @@ namespace WebApplication.Controllers
             _restaurantData = restaurantData;
             _greeter = greeter;
         }
+
+        [AllowAnonymous]
         public ViewResult Index()
         {
             //return File() returns a File
@@ -66,7 +71,7 @@ namespace WebApplication.Controllers
                 restaurant.Cuisine = model.Cuisine;
 
                 _restaurantData.Add(restaurant);
-
+                _restaurantData.Commit();
                 //responding to a post request directly can cause trouble because user can refresh and data will be submitted twice
                 //when there is a successfull post you need to respond with a http redirect and tell the browser to send a get request
                 //to read data from somewhere else following this pattern we can avoid multiple posts
@@ -79,6 +84,31 @@ namespace WebApplication.Controllers
                 return View();
             }
             
+        }
+
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var model = _restaurantData.Get(id);
+            if(model == null) 
+            {
+                return RedirectToAction("Index");
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(int id, RestaurantEditViewModel input)
+        {
+            var restaurant = _restaurantData.Get(id);
+            if(restaurant != null && ModelState.IsValid)
+            {
+                restaurant.Name = input.Name;
+                restaurant.Cuisine = input.Cuisine;
+                _restaurantData.Commit();
+                return RedirectToAction("Details", new { id = restaurant.Id });
+            }
+            return View(restaurant);
         }
     }
 }

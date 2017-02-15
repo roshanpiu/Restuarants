@@ -9,6 +9,7 @@ namespace WebApplication.Services
         IEnumerable<Restaurant> GetAll();
         Restaurant Get(int id);
         void Add(Restaurant newRestaurant);
+        int Commit();
     }
 
     public class SqlRestaurantData : IRestaurantData
@@ -18,6 +19,11 @@ namespace WebApplication.Services
         public SqlRestaurantData(WebApplicationDbContext context)
         {
             _context = context;
+        }
+
+        public int Commit()
+        {
+            return _context.SaveChanges();
         }
 
         public IEnumerable<Restaurant> GetAll()
@@ -33,7 +39,6 @@ namespace WebApplication.Services
         public void Add(Restaurant newRestaurant)
         {
             _context.Add(newRestaurant);
-            _context.SaveChanges();
         }
     }
 
@@ -42,6 +47,11 @@ namespace WebApplication.Services
         //Lists are not thread safe carefull when using in a web application
         //can not be used by concurrent users
         static List<Restaurant> _restaurants;
+
+        public int Commit()
+        {
+            return 0;
+        }
 
         public InMemoryRestaurantData()
         {

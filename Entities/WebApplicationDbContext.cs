@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace WebApplication.Entities
 {
-    public class WebApplicationDbContext : DbContext
+    public class WebApplicationDbContext : IdentityDbContext<User>
     {
         public WebApplicationDbContext(DbContextOptions<WebApplicationDbContext> options) : base(options)
         {

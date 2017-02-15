@@ -1,10 +1,31 @@
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
 <!DOCTYPE html>
 <html>
     <head>
         <title>@ViewBag.Title</title>
     </head>
     <body>
+        <div>
+            @if (SignInManager.IsSignedIn(User))
+                {
+                    <form method="post" asp-controller="Account" asp-action="Logout" class="navbar-form">
+                        @UserManager.GetUserName(User)
+                        <input type="submit" value="Logout" class="btn btn-danger" />
+                    </form>
+                }
+                else
+                {
+                    <a class="btn btn-default btn-xs navbar-btn" asp-controller="Account" asp-action="Login">Login</a>
+                    <a class="btn btn-default btn-xs navbar-btn" asp-controller="Account" asp-action="Register">Register</a>
+                }
+        </div>
         <div>@RenderBody()</div>
-        <footer>@RenderSection("footer", false)</footer>
+        <footer>
+            @RenderSection("footer", false)
+            @await Component.InvokeAsync("Greeting")
+        </footer>
     </body>
 </html>
